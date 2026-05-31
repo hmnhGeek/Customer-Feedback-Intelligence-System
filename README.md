@@ -262,30 +262,6 @@ Uses clustering algorithms to discover hidden patterns in customer feedback.
 
 Provides powerful pretrained language representations for sentiment analysis.
 
----
-
-## Future Enhancements
-
-Potential improvements include:
-
-- Multi-class sentiment analysis
-- Aspect-based sentiment analysis
-- Named Entity Recognition (NER)
-- LLM-powered feedback summarization
-- Retrieval-Augmented Generation (RAG)
-- Support for local LLMs through Ollama
-- Export reports to PDF and Excel
-
----
-
-## Learning Notes
-
-One of the goals of this project was to connect NLP theory with practical implementation.
-
-Rather than focusing solely on algorithms, the project demonstrates how multiple NLP and machine learning techniques can be combined into a complete, deployable application that solves a real-world business problem.
-
----
-
 ## License
 
 This project is released under the MIT License.
