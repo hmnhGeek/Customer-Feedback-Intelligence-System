@@ -7,9 +7,10 @@ requires-python = ">=3.12"
 dependencies = [
     "bs4>=0.0.2",
     "dotenv>=0.9.9",
-    "markdown-pdf>=1.13.2",
+    "markdown>=3.10.2",
     "openai>=2.38.0",
     "pandas>=3.0.3",
+    "playwright>=1.60.0",
     "plotly>=6.7.0",
     "scikit-learn>=1.8.0",
     "streamlit>=1.58.0",
