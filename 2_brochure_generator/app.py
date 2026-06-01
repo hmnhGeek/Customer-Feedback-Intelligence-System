@@ -1,5 +1,6 @@
 import streamlit as st
 import subprocess
+import os
 import markdown
 from playwright.sync_api import sync_playwright
 
@@ -21,8 +22,13 @@ st.set_page_config(
 # ----------------------------
 @st.cache_resource
 def install_browser():
-    subprocess.run(["playwright", "install", "chromium"], check=True)
-    subprocess.run(["playwright", "install-deps", "chromium"], check=True)
+    if not os.path.exists(
+        os.path.expanduser("~/.cache/ms-playwright")
+    ):
+        subprocess.run(
+            ["playwright", "install", "chromium"],
+            check=True
+        )
 
 
 install_browser()
