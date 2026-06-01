@@ -22,6 +22,7 @@ st.set_page_config(
 @st.cache_resource
 def install_browser():
     subprocess.run(["playwright", "install", "chromium"], check=True)
+    subprocess.run(["playwright", "install-deps", "chromium"], check=True)
 
 
 install_browser()
@@ -143,7 +144,8 @@ def markdown_to_pdf(company_name: str, markdown_text: str) -> bytes:
             headless=True,
             args=[
                 "--no-sandbox",
-                "--disable-dev-shm-usage"
+                "--disable-dev-shm-usage",
+                "--disable-gpu"
             ]
         )
         page = browser.new_page()
