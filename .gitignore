@@ -11,4 +11,3 @@ wheels/
 
 # environment files
 .env
-.env.*
