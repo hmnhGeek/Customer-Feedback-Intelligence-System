@@ -139,7 +139,13 @@ def markdown_to_pdf(company_name: str, markdown_text: str) -> bytes:
     """
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage"
+            ]
+        )
         page = browser.new_page()
 
         page.set_content(html, wait_until="load")
