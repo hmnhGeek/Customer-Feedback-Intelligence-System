@@ -6,6 +6,7 @@ from services.chat_service import ChatService
 
 st.set_page_config(page_title="YouTube Chatbot", layout="wide")
 
+
 # ---------------------------
 # SESSION STATE
 # ---------------------------
@@ -41,12 +42,10 @@ if st.session_state.stage == "input":
             try:
                 transcript = YouTubeTranscriptService.get_transcript(url)
 
-                # store in session
                 st.session_state.transcript = transcript
                 st.session_state.chat_service = ChatService(transcript)
                 st.session_state.messages = []
 
-                # move to chat stage
                 st.session_state.stage = "chat"
 
                 st.rerun()
@@ -62,7 +61,7 @@ elif st.session_state.stage == "chat":
 
     st.subheader("💬 Chat with the video")
 
-    # Optional transcript preview
+    # Transcript preview
     with st.expander("📄 View Transcript"):
         st.write(st.session_state.transcript.text[:3000])
 
@@ -74,37 +73,54 @@ elif st.session_state.stage == "chat":
         st.session_state.messages = []
         st.rerun()
 
-    # Chat history
+    # ---------------------------
+    # CHAT HISTORY
+    # ---------------------------
     for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
+        avatar = "🧑‍💻" if msg["role"] == "user" else "🤖"
+
+        with st.chat_message(msg["role"], avatar=avatar):
             st.markdown(msg["content"])
 
-    # Input box
+    # ---------------------------
+    # USER INPUT
+    # ---------------------------
     user_input = st.chat_input("Ask something about the video...")
 
     if user_input:
 
-        # save user message
+        # Save user message
         st.session_state.messages.append(
             {"role": "user", "content": user_input}
         )
 
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar="🧑‍💻"):
             st.markdown(user_input)
 
-        # assistant response
-        with st.chat_message("assistant"):
-            placeholder = st.empty()
+        # ---------------------------
+        # ASSISTANT RESPONSE (STREAMING + TYPING)
+        # ---------------------------
+        with st.chat_message("assistant", avatar="🤖"):
+            typing_placeholder = st.empty()
+            response_placeholder = st.empty()
+
+            typing_placeholder.markdown("🤖 *Thinking...*")
+
             full_response = ""
 
             for chunk in st.session_state.chat_service.chat(
                 user_input,
+                # history without latest user msg
                 st.session_state.messages[:-1]
             ):
                 full_response = chunk
-                placeholder.markdown(full_response)
 
-        # save assistant message
+                typing_placeholder.empty()
+                response_placeholder.markdown(full_response)
+
+            typing_placeholder.empty()
+
+        # Save assistant message
         st.session_state.messages.append(
             {"role": "assistant", "content": full_response}
         )
