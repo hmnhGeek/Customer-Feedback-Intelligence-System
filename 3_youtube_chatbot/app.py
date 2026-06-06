@@ -35,7 +35,7 @@ if st.session_state.stage == "input":
 
     url = st.text_input("YouTube URL")
 
-    if st.button("Load Video") and url:
+    if st.button("Load Transcript") and url:
 
         with st.spinner("Fetching transcript..."):
 

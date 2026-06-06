@@ -10,6 +10,8 @@ class EnvironmentService:
         self.api_key = os.getenv("OPENAI_API_KEY")
         self.model = os.getenv("AI_MODEL")
         self.base_url = os.getenv("BASE_URL")
+        self.proxy_user = os.getenv("PROXY_USER")
+        self.proxy_pwd = os.getenv("PROXY_PWD")
 
         self.openai_client = OpenAI(
             base_url=self.base_url,
@@ -24,3 +26,6 @@ class EnvironmentService:
 
     def get_base_url(self):
         return self.base_url
+
+    def get_proxy_details(self):
+        return {"user": self.proxy_user, "pwd": self.proxy_pwd}

@@ -1,6 +1,10 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 from models.transcript import Transcript, TranscriptSegment
 from utils.youtube_parser import Parser
+from youtube_transcript_api.proxies import WebshareProxyConfig
+from services.environment_service import EnvironmentService
+
+proxy_details = EnvironmentService().get_proxy_details()
 
 
 class YouTubeTranscriptService:
@@ -8,7 +12,7 @@ class YouTubeTranscriptService:
     def get_transcript(url: str) -> Transcript:
         video_id = Parser.extract_video_id(url)
         raw_transcript = YouTubeTranscriptService._fetch(video_id)
-        snippets = raw_transcript.snippets  # ✅ IMPORTANT FIX
+        snippets = raw_transcript.snippets
 
         segments = [
             TranscriptSegment(
@@ -30,7 +34,12 @@ class YouTubeTranscriptService:
     @staticmethod
     def _fetch(video_id: str):
         try:
-            yt = YouTubeTranscriptApi()
+            yt = YouTubeTranscriptApi(
+                proxy_config=WebshareProxyConfig(
+                    proxy_username=proxy_details["user"],
+                    proxy_password=proxy_details["pwd"],
+                )
+            )
 
             # 👇 BEST OPTION: let library choose best available transcript
             transcript_list = yt.list(video_id)
